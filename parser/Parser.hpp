@@ -6,7 +6,7 @@
 /*   By: mvieira- <mvieira-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 09:28:15 by mvieira-          #+#    #+#             */
-/*   Updated: 2023/01/02 11:38:45 by mvieira-         ###   ########.fr       */
+/*   Updated: 2023/01/03 09:37:13 by mvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,18 @@
 #include "webserv.hpp"
 
 class Parser {
-private:
-  char *file_name;
-  std::vector<Config> servers_conf;
 
-public:
-  Parser();
-  Parser(char  *file_name);
-  ~Parser();
-  
-  int parse();
-  std::vector<Config> getServersConf() const;
+  private:
+    char *file_name;
+    std::vector<Config> servers_conf;
+
+  public:
+    Parser();
+    Parser(char  *file_name);
+    ~Parser();
+
+    int parse();
+    std::vector<Config> getServersConf() const;
 
 };
 
