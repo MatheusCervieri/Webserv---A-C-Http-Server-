@@ -4,6 +4,8 @@
 #define BACKLOG 10
 #define BUFFER_SIZE 1024
 
+/**/
+
 //A server listen for connection on a specif port, and for each connection, it reads the 
 //request from the client and sends a response back.
 //To test this simple server we can use curl http://localhost:8000/

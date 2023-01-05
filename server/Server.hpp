@@ -6,7 +6,7 @@
 /*   By: mvieira- <mvieira-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 09:28:15 by mvieira-          #+#    #+#             */
-/*   Updated: 2023/01/05 11:01:41 by mvieira-         ###   ########.fr       */
+/*   Updated: 2023/01/05 12:43:46 by mvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ class Server {
     ~Server();
     int start();
     int create_sockets();
-    int read_request_data(int socket ,int request_buf_size)
+    int read_request_data(int socket ,int request_buf_size);
+    int send_basic_response(int socketfd);
     int handle_request_data();
     void accept_connections();
+    void close_sockets_fd();
 };
 
 #endif

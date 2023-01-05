@@ -6,23 +6,12 @@
 /*   By: mvieira- <mvieira-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 10:16:53 by mvieira-          #+#    #+#             */
-/*   Updated: 2023/01/05 11:01:51 by mvieira-         ###   ########.fr       */
+/*   Updated: 2023/01/05 12:46:43 by mvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-/*To create a simple HTTP server using the above structs, you can follow these steps:
-
-
-Set the socket to listen for incoming connections.
-In a loop, accept incoming connections and create a new thread or process to handle the request.
-In the thread or process handling the request, read the HTTP request and parse it to extract the request method, URL, headers, and body.
-Use the URL and the defined routes in the configuration file to determine the location of the requested resource and the allowed HTTP methods for that route.
-If the request method is allowed for the route, check if the route specifies any CGI programs that need to be executed. If a CGI program is specified, execute it and send the output as the response body.
-If no CGI program is specified, check if the route specifies a root directory. If a root directory is specified, search for the requested resource in that directory and send the file as the response body if it exists.
-If the request method is not allowed for the route or the requested resource does not exist, send an appropriate error response.
-Close the socket and clean up any resources used by the thread or process.*/
 
 
 Server::Server() {
@@ -41,6 +30,7 @@ Server::~Server() {
 int Server::start()
 {
     this->create_sockets();
+    this->accept_connections();
     return (0);
 }
 
@@ -68,6 +58,13 @@ void Server::accept_connections() {
         } else if (pid == 0) {
             // this is the child process
             this->read_request_data(newsockfd, 1024);
+            //handle request!
+            //send a response based on the request!
+            this->send_basic_response(newsockfd);
+            close(newsockfd);
+            this->close_sockets_fd();
+            exit(1);
+           
             // handle the request here
         } else {
             // this is the parent process
@@ -89,13 +86,27 @@ int Server::read_request_data(int socket ,int request_buf_size)
         return 1;
     }
 
+    std::cout << "Request Buff" << std::endl << request_buf << std::endl;
+    
+    
     
     return (0);
 }
 
 int Server::handle_request_data()
 {
-    
+    return (0);   
+}
+
+int Server::send_basic_response(int socketfd)
+{
+    const char* response = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 11\n\nHello World";
+    if (send(socketfd, response, strlen(response), 0) == -1) 
+    {
+      std::cout << "send: " << strerror(errno) << std::endl;
+      return (1);
+    }
+    return (0);
 }
 
 int Server::create_sockets() {
@@ -128,11 +139,20 @@ int Server::create_sockets() {
             return 1;
         }
 
-
         // add the socket file descriptor to the vector
         this->sockets.push_back(sockfd);
     }
   return 0;
+}
+
+void Server::close_sockets_fd()
+{
+    std::vector<int>::iterator it;
+    for (it = this->sockets.begin(); it != this->sockets.end(); ++it) 
+    {
+        int sockfd = *it;
+        close(sockfd);
+    }
 }
 
 
