@@ -6,11 +6,12 @@
 /*   By: mvieira- <mvieira-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 09:44:34 by mvieira-          #+#    #+#             */
-/*   Updated: 2023/01/02 16:34:04 by mvieira-         ###   ########.fr       */
+/*   Updated: 2023/01/05 09:57:30 by mvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
+#include "./server/Server.hpp"
 #include "./parser/Parser.hpp"
 
 void print_config(std::vector<Config> servers_confs) {
@@ -68,6 +69,6 @@ int main(int argc, char** argv)
         return (1);
     }
     print_config(parser.getServersConf());
-    basic_server();
+    Server server(parser.getServersConf());
     return 0;
 }

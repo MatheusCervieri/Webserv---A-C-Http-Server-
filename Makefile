@@ -6,7 +6,7 @@
 #    By: mvieira- <mvieira-@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/26 08:06:24 by mvieira-          #+#    #+#              #
-#    Updated: 2023/01/02 09:50:02 by mvieira-         ###   ########.fr        #
+#    Updated: 2023/01/05 09:58:44 by mvieira-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ RM			=	rm -rf
 SRCS		=	main.cpp \
 				basic_server.cpp \
 				parser/Parser.cpp \
+				server/Server.cpp \
 
 OBJS		=	$(SRCS:%.cpp=%.o)
 

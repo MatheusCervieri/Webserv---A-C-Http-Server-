@@ -6,7 +6,7 @@
 /*   By: mvieira- <mvieira-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 09:43:44 by mvieira-          #+#    #+#             */
-/*   Updated: 2023/01/03 09:35:26 by mvieira-         ###   ########.fr       */
+/*   Updated: 2023/01/03 09:48:28 by mvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ int Parser::parse() {
     return (0);
 }
 
-std::vector<Config> Parser::getServersConf() const {
+std::vector<Config> Parser::getServersConf() const 
+{
   return this->servers_conf;
 }

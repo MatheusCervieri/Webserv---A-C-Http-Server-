@@ -85,7 +85,8 @@ int basic_server() {
 
     // Send the response
     const char* response = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 11\n\nHello World";
-    if (send(new_fd, response, strlen(response), 0) == -1) {
+    if (send(new_fd, response, strlen(response), 0) == -1) 
+    {
       std::cout << "send: " << strerror(errno) << std::endl;
       continue;
     }
