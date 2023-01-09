@@ -6,7 +6,7 @@
 /*   By: mvieira- <mvieira-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 10:16:53 by mvieira-          #+#    #+#             */
-/*   Updated: 2023/01/05 12:46:43 by mvieira-         ###   ########.fr       */
+/*   Updated: 2023/01/09 09:38:59 by mvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,44 +35,64 @@ int Server::start()
 }
 
 void Server::accept_connections() {
-  while (true) {
-    // iterate through all of the sockets
-    std::vector<int>::iterator it;
-    for (it = this->sockets.begin(); it != this->sockets.end(); ++it) {
-      int sockfd = *it;
-      // accept an incoming connection
-      struct sockaddr_in cli_addr;
-      socklen_t clilen = sizeof(cli_addr);
-      //accept create a new socket!
-      int newsockfd = accept(sockfd, (struct sockaddr*)&cli_addr, &clilen);
+    int nfds = this->sockets.size();
+    struct pollfd fds[nfds];
+    
 
-      if (newsockfd < 0) {
-        // there was an error accepting the connection
-        std::cerr << "Error accepting connection" << std::endl;
-      } else {
-        pid_t pid = fork();
+    for (int i = 0; i < nfds; i++) {
+      fds[i].fd = this->sockets[i];
+      fds[i].events = POLLIN;
+    }
+  while (true)
+  {
+    
+    // call the poll function
+    /*The value of TIMEOUT_MS should be the maximum time in milliseconds that the poll function should wait for events to occur. This value can be set to any integer, depending on the specific requirements of your server. For example, you might set TIMEOUT_MS to 1000 to have the poll function wait for 1 second before returning. Alternatively, you might set TIMEOUT_MS to -1 to have the poll function wait indefinitely until an event occurs.
 
-        if (pid < 0) {
-            // error occurred
-            std::cerr << "Error creating new process" << std::endl;
-        } else if (pid == 0) {
-            // this is the child process
+    It is important to consider the value of TIMEOUT_MS carefully, as it can affect the performance and responsiveness of your server. If you set TIMEOUT_MS to a low value, the server will be able to respond more quickly to incoming requests, but it may also consume more CPU resources. If you set TIMEOUT_MS to a high value, the server may be slower to respond to incoming requests, but it will consume fewer CPU resources.*/
+    int ret = poll(fds, nfds, -1); //-1 is the value of the timeout.
+    if (ret < 0) 
+    {
+      // there was an error with the poll function
+      std::cerr << "Error with poll function" << std::endl;
+      return;
+    } 
+    else if (ret == 0) 
+    {
+      // the poll function timed out
+      return;
+    } 
+    else 
+    {
+        // iterate through the file descriptors and check the event flags
+      for (int i = 0; i < nfds; i++) 
+      {
+        int sockfd = fds[i].fd;
+        if (fds[i].revents & POLLIN) 
+        {
+        struct sockaddr_in cli_addr;
+        socklen_t clilen = sizeof(cli_addr); //store the size of the client adress
+        //accept create a new socket!
+        int newsockfd = accept(sockfd, (struct sockaddr*)&cli_addr, &clilen);
+        if (newsockfd < 0) {
+          // there was an error accepting the connection
+          std::cerr << "Error accepting connection" << std::endl;
+        } 
+        else 
+        {
             this->read_request_data(newsockfd, 1024);
             //handle request!
             //send a response based on the request!
             this->send_basic_response(newsockfd);
-            close(newsockfd);
-            this->close_sockets_fd();
-            exit(1);
-           
-            // handle the request here
-        } else {
-            // this is the parent process
-            // continue accepting connections
+            //close(newsockfd);
+            //this->close_sockets_fd();
+
+        }
         }
       }
     }
   }
+
 }
 
 int Server::read_request_data(int socket ,int request_buf_size)

@@ -16,6 +16,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
+#include <poll.h>
 
 struct Route {
   std::string location_dir;
