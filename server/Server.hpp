@@ -6,7 +6,7 @@
 /*   By: mvieira- <mvieira-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 09:28:15 by mvieira-          #+#    #+#             */
-/*   Updated: 2023/01/05 12:43:46 by mvieira-         ###   ########.fr       */
+/*   Updated: 2023/01/09 11:08:43 by mvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class Server {
   private:
     std::vector<Config> servers_conf;
     std::vector<int> sockets;
+    bool running;
 
   public:
     Server();
@@ -32,6 +33,7 @@ class Server {
     int handle_request_data();
     void accept_connections();
     void close_sockets_fd();
+    void stop();
 };
 
 #endif
